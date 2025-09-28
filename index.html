@@ -5,10 +5,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prod</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: sans-serif;
+    }
+
+    canvas {
+      border: 2px solid #333;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .canvas-container {
+      display: flex;
+      justify-content: center;
+      /* Centers horizontally */
+      align-items: center;
+      /* Centers vertically */
+      height: 80vh;
+      /* Make the container full height of the viewport */
+    }
+  </style>
 </head>
 
 <body>
-  <canvas id="myCanvas" width="280" height="335" style="border:1px solid #000000;"></canvas>
+  <!-- <canvas id="myCanvas" width="280" height="335" style="border:1px solid #000000;"></canvas> -->
+  <div class="canvas-container">
+    <canvas id="myCanvas" width="280" height="335"></canvas>
+  </div>
   <p id="para"></p>
   <script src="script.js"></script>
 </body>

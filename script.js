@@ -62,6 +62,7 @@ block_colors = {
 
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
+var rect = canvas.getBoundingClientRect();
 
 function drawBlock(x, y, color) {
     ctx.fillStyle = color;
@@ -69,25 +70,31 @@ function drawBlock(x, y, color) {
 }
 
 function pick(event) {
-    pickX = event.clientX;
-    pickY = event.clientY;
+    pickX = event.offsetX;
+    pickY = event.offsetY;
+    document.getElementById('para').textContent = "Pick: " + pickX + "," + pickY;
+}
+
+function pickTouch(event) {
+    pickX = Math.floor(event.touches[0].clientX - rect.left);
+    pickY = Math.floor(event.touches[0].clientY - rect.top);
     document.getElementById('para').textContent = "Pick: " + pickX + "," + pickY;
 }
 
 function drop(event) {
     ++turn;
-    dropX = event.clientX;
-    dropY = event.clientY;
+    if (event.offsetX > 0) {
+        dropX = event.offsetX;
+        dropY = event.offsetY;
+    }
+    else {
+        dropX = Math.floor(event.changedTouches[0].clientX - rect.left);
+        dropY = Math.floor(event.changedTouches[0].clientY - rect.top);
+    }
     document.getElementById('para').textContent = document.getElementById('para').textContent + "; Drop: " + dropX + "," + dropY + "; Turn: " + turn;
 
-    // for (let i = 0; i < 6; i++) {
-    //     temp = board[Math.floor(dropX / 62)][i];
-    //     board[Math.floor(dropX / 62)][i] = board[Math.floor(pickX / 62)][i];
-    //     board[Math.floor(pickX / 62)][i] = temp;
-    // }
-    // drawBoard();
-    pickX = Math.floor(pickX / 62);
-    dropX = Math.floor(dropX / 62);
+    pickX = Math.floor(pickX / 55);
+    dropX = Math.floor(dropX / 55);
     fdash = getPos(pickX);
     cnt = 0
 
@@ -109,8 +116,16 @@ function drop(event) {
         swap(pickX, dropX, getPos(pickX) + 1, getPos(dropX), cnt)
     // audio.play();
     drawBoard();
-    if(check(rows))
-        alert("7 crore");
+    if (check(rows)) {
+        win();
+    }
+}
+
+function win() {
+    end = Math.floor((new Date()).getTime() / 1000);
+    time = end - start;
+    document.getElementById('para').textContent = "You solved on " + turn + " turn, in " + time + " seconds.";
+    // alert("You won on" + turn + "turn, in " + time + "seconds.");
 }
 
 function swap(pick, drop, pick_pos, drop_pos, cnt) {
@@ -132,7 +147,7 @@ function check(rows) {
         sum += row_set.size;
         --rows;
     }
-    console.log(sum);
+    // console.log(sum);
     if (sum == (colors * 2 + 1))
         return 1;
     else
@@ -147,7 +162,8 @@ function drawBoard() {
 }
 
 document.addEventListener("mousedown", pick);
-// document.addEventListener("touchstart", pick);
+document.addEventListener("touchstart", pickTouch);
 document.addEventListener("mouseup", drop);
-// document.addEventListener("touchend", drop);
+document.addEventListener("touchend", drop);
 drawBoard();
+start = Math.floor((new Date()).getTime() / 1000)
