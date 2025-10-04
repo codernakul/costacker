@@ -118,14 +118,19 @@ function drop(event) {
     drawBoard();
     if (check(rows)) {
         win();
+        // promptForReload();
     }
 }
 
 function win() {
     end = Math.floor((new Date()).getTime() / 1000);
     time = end - start;
-    document.getElementById('para').textContent = "You solved on " + turn + " turn, in " + time + " seconds.";
+    // document.getElementById('para').textContent = "You solved on " + turn + " turn, in " + time + " seconds.";
     // alert("You won on" + turn + "turn, in " + time + "seconds.");
+    drawBoard();
+    alert("You solved on " + turn + " turn, in " + time + " seconds.");
+    console.log("Alert dismissed. Reloading page...");
+    location.reload();
 }
 
 function swap(pick, drop, pick_pos, drop_pos, cnt) {
